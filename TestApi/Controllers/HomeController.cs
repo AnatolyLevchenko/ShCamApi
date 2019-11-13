@@ -15,7 +15,7 @@ namespace TestApi.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return Content("WebApi");
         }
 
     }
