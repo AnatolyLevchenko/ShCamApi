@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestApi.Entities
+namespace Api.Entities
 {
     public class Profile:BaseEntity
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestApi.Entities;
+using Api.Entities;
 
-namespace TestApi.Repositories
+namespace Api.Repositories
 {
     public interface IRepository<T> where T : BaseEntity
     {

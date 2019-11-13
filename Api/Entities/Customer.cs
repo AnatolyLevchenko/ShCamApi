@@ -1,4 +1,4 @@
-﻿namespace TestApi.Entities
+﻿namespace Api.Entities
 {
     public class Customer : BaseEntity
     {

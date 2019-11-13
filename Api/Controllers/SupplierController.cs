@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using TestApi.Entities;
-using TestApi.Repositories;
+using Api.Entities;
+using Api.Repositories;
 
-namespace TestApi.Controllers
+namespace Api.Controllers
 {
     public class SupplierController : ApiController
     {

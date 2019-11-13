@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
-using TestApi.Entities;
-using TestApi.Repositories;
+using Api.Entities;
+using Api.Repositories;
 
-namespace TestApi.Controllers
+namespace Api.Controllers
 {
     public class HomeController : Controller
     {

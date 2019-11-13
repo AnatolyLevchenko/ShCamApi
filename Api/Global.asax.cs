@@ -1,14 +1,14 @@
-﻿using Autofac;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.WebApi;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TestApi.Repositories;
+using Api.Repositories;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 
-namespace TestApi
+namespace Api
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

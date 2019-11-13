@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Api.Entities;
+using Api.Repositories;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using TestApi.Entities;
-using TestApi.Repositories;
 
-namespace TestApi.Controllers
+namespace Api.Controllers
 {
     public class CustomerController : ApiController
     {
