@@ -11,6 +11,6 @@ namespace TestApi.Repositories
         Task<T> GetAsync(int id);
         Task<int> SaveRangeAsync(IEnumerable<T> list);
         Task UpdateAsync(T t);
-        Task InsertAsync(T t);
+        Task<T> InsertAsync(T t);
     }
 }

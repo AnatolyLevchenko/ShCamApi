@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TestApi.Entities;
 using TestApi.Repositories;
 
@@ -14,20 +13,10 @@ namespace TestApi.Controllers
             _customerRepository = customerRepository;
         }
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var res = await _customerRepository.GetAllAsync();
-            return Json(res, JsonRequestBehavior.AllowGet);
-
-
             return View();
         }
 
-        public async Task<ActionResult> Insert()
-        {
-            await _customerRepository.InsertAsync(new Customer() { Name = "valera", PathToRootOfFiles = "lal" });
-
-            return Content("OK");
-        }
     }
 }

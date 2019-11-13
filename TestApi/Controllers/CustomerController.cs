@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using TestApi.Entities;
 using TestApi.Repositories;
 
@@ -15,31 +16,40 @@ namespace TestApi.Controllers
             _customerRepository = customerRepository;
         }
 
-        public async Task<IEnumerable<Customer>>Get()
+        public async Task<IEnumerable<Customer>> GetAll()
         {
-           var customers= await _customerRepository.GetAllAsync();
-           return customers;
+            var customers = await _customerRepository.GetAllAsync();
+            return customers;
         }
 
-        public async Task<Customer> Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            return await _customerRepository.GetAsync(id);
+            var c = await _customerRepository.GetAsync(id);
+            if (c == null)
+                return NotFound();
+            return Ok();
         }
 
-        // POST api/values
-        public async void Post([FromBody]Customer value)
+        public async Task<IHttpActionResult> Post([FromBody]Customer value)
         {
-            await _customerRepository.InsertAsync(value);
+            var customer = await _customerRepository.InsertAsync(value);
+            return CreatedAtRoute("DefaultApi", new { Id = customer.Id }, customer);
         }
 
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
+        public async Task<IHttpActionResult> Delete(int id)
         {
+            await _customerRepository.DeleteRowAsync(id);
+            return Ok();
         }
 
-        // DELETE api/values/5
-        public void Delete(int id)
+
+        public async Task<OkResult> Patch([FromBody]Customer customer)
         {
+           await _customerRepository.UpdateAsync(customer);
+           return Ok();
         }
+
+
+
     }
 }

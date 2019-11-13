@@ -13,7 +13,7 @@ using TestApi.Entities;
 
 namespace TestApi.Repositories
 {
-    public  class DapperRepository<T> : IRepository<T> where T : BaseEntity
+    public class DapperRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly string _connectionString;
         private IEnumerable<PropertyInfo> GetProperties => typeof(T).GetProperties();
@@ -51,9 +51,6 @@ namespace TestApi.Repositories
             using (var connection = CreateConnection())
             {
                 var result = await connection.QuerySingleOrDefaultAsync<T>($"SELECT * FROM {typeof(T).Name} WHERE Id=@Id", new { Id = id });
-                if (result == null)
-                    throw new KeyNotFoundException($"{typeof(T).Name} with id [{id}] could not be found.");
-
                 return result;
             }
         }
@@ -70,13 +67,15 @@ namespace TestApi.Repositories
             return inserted;
         }
 
-        public async Task InsertAsync(T t)
+        public async Task<T> InsertAsync(T t)
         {
             var insertQuery = GenerateInsertQuery(typeof(T));
 
             using (var connection = CreateConnection())
             {
                 await connection.ExecuteAsync(insertQuery, t);
+                t.Id = await connection.ExecuteScalarAsync<int>("select LAST_INSERT_ID()");
+                return t;
             }
         }
 
@@ -105,9 +104,9 @@ namespace TestApi.Repositories
         private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
         {
             return (from prop in listOfProperties
-                let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
-                where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
-                select prop.Name).ToList();
+                    let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
+                    where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
+                    select prop.Name).ToList();
         }
 
         public async Task UpdateAsync(T t)
