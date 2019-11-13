@@ -1,18 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TestApi.Entities;
 
 namespace TestApi.Repositories
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        
-        T GetById(int id);
-        List<T> GetAll();
-        void Insert(T entity);
-        void Insert(IEnumerable<T> entities);
-        void Update(T entity);
-        void Update(IEnumerable<T> entities);
-        void Delete(T entity);
-        void Delete(IEnumerable<T> entities);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task DeleteRowAsync(int id);
+        Task<T> GetAsync(int id);
+        Task<int> SaveRangeAsync(IEnumerable<T> list);
+        Task UpdateAsync(T t);
+        Task InsertAsync(T t);
     }
 }

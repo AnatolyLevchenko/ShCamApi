@@ -194,7 +194,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\DapperExtensions.cs" />
     <Compile Include="Repositories\DapperRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
   </ItemGroup>

@@ -1,7 +1,8 @@
 ﻿namespace TestApi.Entities
 {
-    public class BaseEntity
+    public abstract class BaseEntity
     {
+        //[Description("ignore")]
         public int Id { get; set; }
     }
 }

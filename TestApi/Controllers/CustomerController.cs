@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 using TestApi.Entities;
 using TestApi.Repositories;
@@ -14,20 +15,21 @@ namespace TestApi.Controllers
             _customerRepository = customerRepository;
         }
 
-        public IEnumerable<Customer> Get()
+        public async Task<IEnumerable<Customer>>Get()
         {
-            return _customerRepository.GetAll();
+           var customers= await _customerRepository.GetAllAsync();
+           return customers;
         }
 
-        public Customer Get(int id)
+        public async Task<Customer> Get(int id)
         {
-            return _customerRepository.GetById(id);
+            return await _customerRepository.GetAsync(id);
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public async void Post([FromBody]Customer value)
         {
-
+            await _customerRepository.InsertAsync(value);
         }
 
         // PUT api/values/5
