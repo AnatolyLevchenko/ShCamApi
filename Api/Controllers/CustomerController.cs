@@ -27,7 +27,7 @@ namespace Api.Controllers
             var c = await _customerRepository.GetAsync(id);
             if (c == null)
                 return NotFound();
-            return Ok();
+            return Ok(c);
         }
 
         public async Task<IHttpActionResult> Post([FromBody]Customer value)
