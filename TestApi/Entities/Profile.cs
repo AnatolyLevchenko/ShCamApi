@@ -16,10 +16,8 @@ namespace TestApi.Entities
         public decimal Verval { get; set; }
 
         public int SupplierId { get; set; }
-        public virtual Supplier Supplier { get; set; }
 
         public int CustomerId { get; set; }
-        public virtual Customer Customer { get; set; }
 
         public bool Redefine { get; set; }
         public bool Active { get; set; }

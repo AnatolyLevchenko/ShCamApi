@@ -186,6 +186,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Customer.cs" />
