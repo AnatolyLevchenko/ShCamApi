@@ -45,8 +45,8 @@ namespace TestApi.Controllers
 
         public async Task<OkResult> Patch([FromBody]Customer customer)
         {
-           await _customerRepository.UpdateAsync(customer);
-           return Ok();
+            await _customerRepository.UpdateAsync(customer);
+            return Ok();
         }
 
 
