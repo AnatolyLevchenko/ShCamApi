@@ -27,7 +27,7 @@ namespace Api.Controllers
             var s = await _profileRepository.GetAsync(id);
             if (s == null)
                 return NotFound();
-            return Ok();
+            return Ok(s);
         }
 
         public async Task<IHttpActionResult> Post([FromBody]Profile value)

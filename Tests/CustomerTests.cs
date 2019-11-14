@@ -37,13 +37,48 @@ namespace Tests
         {
             var repo = new Mock<IRepository<Customer>>();
             var id = 1;
-            repo.Setup(r => r.GetAsync(id)).ReturnsAsync(_customers[id]);
+            repo.Setup(r => r.GetAsync(id)).ReturnsAsync(_customers.Where(c=>c.Id==id).FirstOrDefault);
 
             var controller = new CustomerController(repo.Object);
             var value = (OkNegotiatedContentResult<Customer>)controller.Get(id).Result ;
 
-            Assert.AreEqual(value.Content.Name,_customers[id].Name);
-            Assert.AreEqual(value.Content.Id,_customers[id].Id);
+            Assert.AreEqual(value.Content.Name,_customers[0].Name);
+            Assert.AreEqual(value.Content.Id,_customers[0].Id);
+        }
+
+        [TestMethod]
+        public void ItShouldReturnNotFound()
+        {
+            var repo = new Mock<IRepository<Customer>>();
+            var id = _customers.Count*10;
+            repo.Setup(r => r.GetAsync(id)).ReturnsAsync(_customers.Where(c => c.Id == id).FirstOrDefault);
+
+            var controller = new CustomerController(repo.Object);
+            var value =controller.Get(id).Result;
+
+            Assert.IsInstanceOfType(value, typeof(NotFoundResult));
+        }
+
+        [TestMethod]
+        public void ItShouldCreateNewCustomer()
+        {
+            var repo = new Mock<IRepository<Customer>>();
+            var customer=new Customer
+            {
+                Name = "Volodya",
+                PathToRootOfFiles = "D:/files"
+            };
+
+
+            repo.Setup(r => r.InsertAsync(customer)).ReturnsAsync(new Customer {Id=1,Name = customer.Name,PathToRootOfFiles=customer.PathToRootOfFiles});
+            var controller=new CustomerController(repo.Object);
+            var value = controller.Post(customer).Result;
+
+            Assert.IsInstanceOfType(value, typeof(CreatedAtRouteNegotiatedContentResult<Customer>));
+
+            var created = (CreatedAtRouteNegotiatedContentResult<Customer>) value;
+
+            Assert.IsTrue(created.Content.Id>0);
         }
     }
 }

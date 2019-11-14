@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Api.Entities;
+using Api.Repositories;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Api.Entities;
-using Api.Repositories;
 
 namespace Api.Controllers
 {
@@ -26,7 +26,7 @@ namespace Api.Controllers
             var s = await _supplier.GetAsync(id);
             if (s == null)
                 return NotFound();
-            return Ok();
+            return Ok(s);
         }
 
         public async Task<IHttpActionResult> Post([FromBody]Supplier value)
