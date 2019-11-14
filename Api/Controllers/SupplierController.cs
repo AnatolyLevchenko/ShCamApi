@@ -7,6 +7,7 @@ using System.Web.Http.Results;
 
 namespace Api.Controllers
 {
+    [CustomAuthorize]
     public class SupplierController : ApiController
     {
         private readonly IRepository<Supplier> _supplier;

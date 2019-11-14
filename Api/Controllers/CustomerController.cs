@@ -7,6 +7,7 @@ using System.Web.Http.Results;
 
 namespace Api.Controllers
 {
+    [CustomAuthorize]
     public class CustomerController : ApiController
     {
         private readonly IRepository<Customer> _customerRepository;

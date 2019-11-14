@@ -1,12 +1,11 @@
-﻿using System.Configuration;
+﻿using Api.Repositories;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Api.Repositories;
-using Autofac;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.WebApi;
 
 namespace Api
 {
@@ -44,7 +43,7 @@ namespace Api
             builder.RegisterGeneric(typeof(DapperRepository<>))
                 .As(typeof(IRepository<>))
                 .InstancePerLifetimeScope()
-                .WithParameter(new TypedParameter(typeof(string),ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString));
+                .WithParameter(new TypedParameter(typeof(string),Helper.ConnectionString));
 
 
             var config = GlobalConfiguration.Configuration;

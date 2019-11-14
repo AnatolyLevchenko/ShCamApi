@@ -8,6 +8,7 @@ using Api.Repositories;
 
 namespace Api.Controllers
 {
+    [CustomAuthorize]
     public class ProfileController : ApiController
     {
         private readonly IRepository<Profile> _profileRepository;

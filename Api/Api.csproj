@@ -156,14 +156,19 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Auth\EncryptionHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
+    <Compile Include="CustomAuthorize.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Entities\Supplier.cs" />
+    <Compile Include="Entities\Tokens.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

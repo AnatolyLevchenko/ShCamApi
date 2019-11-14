@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Api.Entities;
+using Dapper;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,9 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Api.Entities;
-using Dapper;
-using MySql.Data.MySqlClient;
 
 namespace Api.Repositories
 {
@@ -75,6 +75,15 @@ namespace Api.Repositories
                 await connection.ExecuteAsync(insertQuery, t);
                 t.Id = await connection.ExecuteScalarAsync<int>("select LAST_INSERT_ID()");
                 return t;
+            }
+        }
+
+        public T Filter(string column,object value)
+        {
+            using (var connection = CreateConnection())
+            {
+                var result = connection.QuerySingleOrDefault<T>($"SELECT * FROM {typeof(T).Name} WHERE {column}=@arg", new { arg = value });
+                return result;
             }
         }
 
