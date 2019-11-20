@@ -37,7 +37,7 @@ namespace Tests
         {
             var repo = new Mock<IRepository<Customer>>();
             var id = 1;
-            repo.Setup(r => r.GetAsync(id)).ReturnsAsync(_customers.Where(c=>c.Id==id).FirstOrDefault);
+            repo.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(_customers.Where(c=>c.Id==id).FirstOrDefault);
 
             var controller = new CustomerController(repo.Object);
             var value = (OkNegotiatedContentResult<Customer>)controller.Get(id).Result ;
@@ -51,7 +51,7 @@ namespace Tests
         {
             var repo = new Mock<IRepository<Customer>>();
             var id = _customers.Count*10;
-            repo.Setup(r => r.GetAsync(id)).ReturnsAsync(_customers.Where(c => c.Id == id).FirstOrDefault);
+            repo.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(_customers.Where(c => c.Id == id).FirstOrDefault);
 
             var controller = new CustomerController(repo.Object);
             var value =controller.Get(id).Result;

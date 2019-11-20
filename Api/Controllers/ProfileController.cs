@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Api.Entities;
+using Api.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Api.Entities;
-using Api.Repositories;
 
 namespace Api.Controllers
 {
     [CustomAuthorize]
-    public class ProfileController : ApiController
+    public class ProfileController : BaseApiController
     {
         private readonly IRepository<Profile> _profileRepository;
 
@@ -20,12 +20,13 @@ namespace Api.Controllers
 
         public async Task<IEnumerable<Profile>> GetAll()
         {
+            //var t = base.CustomerId;
             return await _profileRepository.GetAllAsync();
         }
 
         public async Task<IHttpActionResult> Get(int id)
         {
-            var s = await _profileRepository.GetAsync(id);
+            var s = await _profileRepository.GetByIdAsync(id);
             if (s == null)
                 return NotFound();
             return Ok(s);
@@ -42,7 +43,7 @@ namespace Api.Controllers
 
         public async Task<IHttpActionResult> Delete(int id)
         {
-            await _profileRepository.DeleteRowAsync(id);
+            await _profileRepository.DeleteByIdAsync(id);
             return Ok();
         }
 

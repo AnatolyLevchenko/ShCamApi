@@ -8,7 +8,7 @@ using System.Web.Http.Results;
 namespace Api.Controllers
 {
     [CustomAuthorize]
-    public class SupplierController : ApiController
+    public class SupplierController : BaseApiController
     {
         private readonly IRepository<Supplier> _supplier;
 
@@ -24,7 +24,7 @@ namespace Api.Controllers
 
         public async Task<IHttpActionResult> Get(int id)
         {
-            var s = await _supplier.GetAsync(id);
+            var s = await _supplier.GetByIdAsync(id);
             if (s == null)
                 return NotFound();
             return Ok(s);
@@ -38,7 +38,7 @@ namespace Api.Controllers
 
         public async Task<IHttpActionResult> Delete(int id)
         {
-            await _supplier.DeleteRowAsync(id);
+            await _supplier.DeleteByIdAsync(id);
             return Ok();
         }
 

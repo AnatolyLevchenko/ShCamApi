@@ -1,33 +1,20 @@
 ﻿using Api.Entities;
 using Dapper;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Api.Helper;
 
 namespace Api.Repositories
 {
-    public class DapperRepository<T> : IRepository<T> where T : BaseEntity
+    public class DapperBase<T> where T:BaseEntity
     {
-        private readonly string _connectionString;
         private IEnumerable<PropertyInfo> GetProperties => typeof(T).GetProperties();
 
-        public DapperRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
-        private IDbConnection CreateConnection()
-        {
-            var conn = new MySqlConnection(_connectionString);
-            conn.Open();
-            return conn;
-        }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -37,15 +24,8 @@ namespace Api.Repositories
             }
         }
 
-        public async Task DeleteRowAsync(int id)
-        {
-            using (var connection = CreateConnection())
-            {
-                await connection.ExecuteAsync($"DELETE FROM {typeof(T).Name} WHERE Id=@Id", new { Id = id });
-            }
-        }
 
-        public async Task<T> GetAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             using (var connection = CreateConnection())
             {
@@ -54,16 +34,23 @@ namespace Api.Repositories
             }
         }
 
-        public async Task<int> SaveRangeAsync(IEnumerable<T> list)
+
+
+        public T Filter(string column,object value)
         {
-            var inserted = 0;
-            var query = GenerateInsertQuery(typeof(T));
             using (var connection = CreateConnection())
             {
-                inserted += await connection.ExecuteAsync(query, list);
+                var result = connection.QuerySingleOrDefault<T>($"SELECT * FROM {typeof(T).Name} WHERE {column}=@arg", new { arg = value });
+                return result;
             }
+        }
 
-            return inserted;
+        public async Task DeleteByIdAsync(int id)
+        {
+            using (var connection = CreateConnection())
+            {
+                await connection.ExecuteAsync($"DELETE FROM {typeof(T).Name} WHERE Id=@Id", new { Id = id });
+            }
         }
 
         public async Task<T> InsertAsync(T t)
@@ -78,16 +65,27 @@ namespace Api.Repositories
             }
         }
 
-        public T Filter(string column,object value)
+
+        public async Task UpdateAsync(T t)
         {
+            var updateQuery = GenerateUpdateQuery(typeof(T));
+
             using (var connection = CreateConnection())
             {
-                var result = connection.QuerySingleOrDefault<T>($"SELECT * FROM {typeof(T).Name} WHERE {column}=@arg", new { arg = value });
-                return result;
+                await connection.ExecuteAsync(updateQuery, t);
             }
         }
 
-        private string GenerateInsertQuery(Type t)
+
+        private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
+        {
+            return (from prop in listOfProperties
+                    let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
+                    where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
+                    select prop.Name).ToList();
+        }
+
+        protected string GenerateInsertQuery(Type t)
         {
             var insertQuery = new StringBuilder($"INSERT INTO {t.Name} ");
 
@@ -109,25 +107,7 @@ namespace Api.Repositories
             return insertQuery.ToString();
         }
 
-        private static List<string> GenerateListOfProperties(IEnumerable<PropertyInfo> listOfProperties)
-        {
-            return (from prop in listOfProperties
-                    let attributes = prop.GetCustomAttributes(typeof(DescriptionAttribute), false)
-                    where attributes.Length <= 0 || (attributes[0] as DescriptionAttribute)?.Description != "ignore"
-                    select prop.Name).ToList();
-        }
-
-        public async Task UpdateAsync(T t)
-        {
-            var updateQuery = GenerateUpdateQuery(typeof(T));
-
-            using (var connection = CreateConnection())
-            {
-                await connection.ExecuteAsync(updateQuery, t);
-            }
-        }
-
-        private string GenerateUpdateQuery(Type t)
+        protected string GenerateUpdateQuery(Type t)
         {
             var updateQuery = new StringBuilder($"UPDATE {t.Name} SET ");
             var properties = GenerateListOfProperties(GetProperties);

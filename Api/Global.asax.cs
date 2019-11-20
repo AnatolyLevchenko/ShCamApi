@@ -39,12 +39,7 @@ namespace Api
             // OPTIONAL: Enable property injection into action filters.
             builder.RegisterFilterProvider();
 
-            //builder.RegisterGeneric(typeof(IRepository<>)).As(typeof(DapperRepository<>)).InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(DapperRepository<>))
-                .As(typeof(IRepository<>))
-                .InstancePerLifetimeScope()
-                .WithParameter(new TypedParameter(typeof(string),Helper.ConnectionString));
-
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).AsClosedTypesOf(typeof(IRepository<>));
 
             var config = GlobalConfiguration.Configuration;
 

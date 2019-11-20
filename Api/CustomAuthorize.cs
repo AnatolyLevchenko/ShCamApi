@@ -21,7 +21,7 @@ namespace Api
                 return;
             }
 
-            IRepository<Tokens> repo=new DapperRepository<Tokens>(Helper.ConnectionString);
+            IRepository<Tokens> repo = new TokensRepository();
             var token=repo.Filter("Token", string.Join("",access_token));
 
 

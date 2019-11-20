@@ -59,7 +59,7 @@ namespace Api.Controllers
         }
 
 
-        public ActionResult Authorize(string login, string password)
+        public async Task<ActionResult> Authorize(string login, string password)
         {
             var user = _userRepository.Filter("Login", login);
 
@@ -73,9 +73,9 @@ namespace Api.Controllers
                         ExpiredUTC = DateTime.UtcNow.AddHours(1),
                         Token = EncryptionHelper.CreateSaltKey(100)
                     };
-                    var res = _tokensRepository.InsertAsync(tokens);
+                    var res = await _tokensRepository.InsertAsync(tokens);
 
-                    return Json(new { res }, JsonRequestBehavior.AllowGet);
+                    return Json(new { TokenId=res.Id,res.Token,res.ExpiredUTC,res.UserId }, JsonRequestBehavior.AllowGet);
                 }
             }
 

@@ -8,7 +8,7 @@ using System.Web.Http.Results;
 namespace Api.Controllers
 {
     [CustomAuthorize]
-    public class CustomerController : ApiController
+    public class CustomerController : BaseApiController
     {
         private readonly IRepository<Customer> _customerRepository;
 
@@ -25,7 +25,7 @@ namespace Api.Controllers
 
         public async Task<IHttpActionResult> Get(int id)
         {
-            var c = await _customerRepository.GetAsync(id);
+            var c = await _customerRepository.GetByIdAsync(id);
             if (c == null)
                 return NotFound();
             return Ok(c);
@@ -39,7 +39,7 @@ namespace Api.Controllers
 
         public async Task<IHttpActionResult> Delete(int id)
         {
-            await _customerRepository.DeleteRowAsync(id);
+            await _customerRepository.DeleteByIdAsync(id);
             return Ok();
         }
 
