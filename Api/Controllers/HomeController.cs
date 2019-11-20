@@ -24,9 +24,14 @@ namespace Api.Controllers
             return Content("WebApi");
         }
 
-        public async Task<JsonResult> Register(string login, string password)
+        public async Task<JsonResult> Register(string login, string pass)
         {
-            var user = new User { Login = login, Password = password };
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(pass))
+            {
+                return Json(new {Message = "login and pass are required"}, JsonRequestBehavior.AllowGet);
+            }
+
+            var user = new User { Login = login, Password = pass };
             var exist = _userRepository.Filter(nameof(user.Login), login);
 
             string message;
