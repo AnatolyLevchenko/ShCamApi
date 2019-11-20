@@ -20,7 +20,6 @@ namespace Api.Controllers
 
         public async Task<IEnumerable<Profile>> GetAll()
         {
-            //var t = base.CustomerId;
             return await _profileRepository.GetAllAsync();
         }
 
